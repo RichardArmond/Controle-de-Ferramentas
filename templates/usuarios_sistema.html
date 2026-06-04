@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row g-4">
+
+    <!-- FORM -->
+
+    <div class="col-lg-4">
+
+        <div class="card-custom">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Novo Usuário
+                </h3>
+
+                <p class="text-muted">
+                    Criar acesso ao sistema
+                </p>
+
+            </div>
+
+            <form method="post">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nome
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="nome"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Usuário
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="usuario"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Senha
+                    </label>
+
+                    <input type="password"
+                           class="form-control"
+                           name="senha"
+                           required>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Tipo
+                    </label>
+
+                    <select class="form-control"
+                            name="tipo"
+                            required>
+
+                        <option value="operador">
+                            Operador
+                        </option>
+
+                        <option value="admin">
+                            Admin
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="d-grid">
+
+                    <button type="submit"
+                            class="btn btn-success btn-lg">
+
+                        <i class="bi bi-person-plus-fill"></i>
+                        Criar Usuário
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- LISTA -->
+
+    <div class="col-lg-8">
+
+        <div class="card-custom">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Usuários do Sistema
+                </h3>
+
+                <p class="text-muted">
+                    Controle de acessos
+                </p>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Usuário</th>
+                                <th>Tipo</th>
+                                <th width="120">Ações</th>
+
+                            </tr>
+
+                        </thead>
+
+                    <tbody>
+
+                        {% for u in usuarios %}
+
+                        <tr>
+
+                            <td>
+
+                                <span class="badge bg-dark">
+                                    #{{ u['id'] }}
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    {{ u['nome'] }}
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                {{ u['usuario'] }}
+
+                            </td>
+
+                            <td>
+
+                                {% if u['tipo'] == 'admin' %}
+
+                                    <span class="badge bg-danger">
+                                        ADMIN
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-primary">
+                                        OPERADOR
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if u['usuario'] != 'Richard Armond' %}
+
+                                <a href="/excluir_usuario_sistema/{{ u['id'] }}"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Deseja excluir este usuário?')">
+
+                                    <i class="bi bi-trash-fill"></i>
+
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

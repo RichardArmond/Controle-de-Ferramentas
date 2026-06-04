@@ -1,0 +1,478 @@
+/* =========================
+   GERAL
+========================= */
+
+body{
+    margin:0;
+    padding:0;
+    background:#222222;
+    font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    color:#f3f4f6;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+
+    background:hsl(0, 0%, 0%);
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    border-right:1px solid #1f2937;
+
+    z-index:1000;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+    padding:25px 20px;
+    border-bottom:1px solid #1f2937;
+
+    text-align:left;
+}
+
+.logo-img{
+    width:180px;
+    height:auto;
+    display:block;
+    margin-bottom:12px;
+}
+
+.logo p{
+    margin:0;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.menu{
+    flex:1;
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+    padding:20px 15px;
+
+    overflow-y:auto;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#d1d5db;
+    padding:14px 16px;
+    border-radius:10px;
+    transition:0.2s;
+    font-size:15px;
+    font-weight:500;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.menu a:hover{
+    background:#2563eb;
+    color:white;
+}
+
+.menu a.active{
+    background:#2563eb;
+    color:white;
+}
+
+/* =========================
+   FOOTER SIDEBAR
+========================= */
+
+.sidebar-footer{
+    padding:20px;
+    font-size:18px;
+    color:#9ca3af;
+
+    border-top:1px solid #1f2937;
+
+    text-align:left;
+
+    background:#000000;
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.main-content{
+    margin-left:260px;
+    padding:30px;
+}
+
+/* =========================
+   TOPO
+========================= */
+
+.topbar{
+    background:#1f2937;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:25px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.35);
+}
+
+.topbar h1{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+}
+
+.topbar p{
+    margin:5px 0 0;
+    color:#9ca3af;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card-custom{
+    background:#1f2937;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.35);
+    margin-bottom:25px;
+}
+
+/* =========================
+   TABELAS
+========================= */
+
+.table{
+    border-radius:12px;
+    overflow:hidden;
+    color:#f3f4f6;
+}
+
+.table thead{
+    background:#1f2937;
+    color:white;
+}
+
+.table thead th{
+    border:none;
+    background:#0f172a;
+    color:#d1d5db;
+    padding:16px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.table tbody td{
+    padding:16px;
+    border-color:#374151;
+}
+
+.table tbody tr:hover{
+    background:#273549;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn-primary{
+    background:#2563eb;
+    border:none;
+}
+
+.btn-success{
+    background:#16a34a;
+    border:none;
+}
+
+.btn-danger{
+    background:#dc2626;
+    border:none;
+}
+
+.btn-warning{
+    border:none;
+}
+
+.btn-dark{
+    background:#111827;
+    border:none;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.form-control{
+    border-radius:10px;
+    padding:12px;
+    border:1px solid #374151;
+    background:#111827;
+    color:white;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:#2563eb;
+    background:#111827;
+    color:white;
+}
+
+.form-control::placeholder{
+    color:#9ca3af;
+}
+
+/* =========================
+   FORM LARGE
+========================= */
+
+.form-control-lg{
+    padding:16px;
+    font-size:18px;
+    border-radius:12px;
+}
+
+/* =========================
+   BOTÕES GRANDES
+========================= */
+
+.btn-lg{
+    padding:12px 22px;
+    border-radius:12px;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge{
+    padding:8px 12px;
+    font-size:13px;
+    border-radius:8px;
+}
+
+.bg-dark{
+    background:#111827 !important;
+}
+
+/* =========================
+   TÍTULOS
+========================= */
+
+h3{
+    font-weight:700;
+}
+
+/* =========================
+   TABELA RESPONSIVA
+========================= */
+
+.table-responsive{
+    border-radius:14px;
+    overflow:hidden;
+}
+
+/* =========================
+   TEXTO MUTED
+========================= */
+
+.text-muted{
+    color:#9ca3af !important;
+}
+
+/* =========================
+   LABELS
+========================= */
+
+label{
+    color:#d1d5db;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+a{
+    text-decoration:none;
+}
+
+/* =========================
+   CARD HEIGHT
+========================= */
+
+.h-100{
+    height:100%;
+}
+
+/* =========================
+   UID INPUT
+========================= */
+
+input[name="uid"]{
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+/* =========================
+   UID CODE
+========================= */
+
+.uid-code{
+    background:#111827;
+    color:#60a5fa;
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-card{
+    background:#1f2937;
+    border-radius:18px;
+    padding:24px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    box-shadow:0 4px 18px rgba(0,0,0,0.35);
+
+    height:100%;
+}
+
+.dashboard-title{
+    color:#9ca3af;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.dashboard-card h2{
+    font-size:34px;
+    font-weight:700;
+    margin:0;
+}
+
+.dashboard-icon{
+    width:64px;
+    height:64px;
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+    color:white;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#374151;
+    border-radius:10px;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width: 768px){
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+
+    .main-content{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .logo{
+        text-align:center;
+    }
+
+    .logo-img{
+        margin:0 auto 12px auto;
+    }
+
+    .sidebar-footer{
+        text-align:center;
+    }
+
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-page{
+    background:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.login-container{
+    width:100%;
+    max-width:420px;
+    padding:20px;
+}
+
+.login-card{
+    background:#1f2937;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.4);
+    text-align:center;
+}
+
+.login-logo{
+    width:180px;
+    margin-bottom:25px;
+}
+
+.login-card h2{
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.login-card p{
+    color:#9ca3af;
+    margin-bottom:30px;
+}

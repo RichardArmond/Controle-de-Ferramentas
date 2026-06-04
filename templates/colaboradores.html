@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row g-4">
+
+    <!-- CADASTRO -->
+
+    <div class="col-lg-4">
+
+        <div class="card-custom h-100">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Novo Colaborador
+                </h3>
+
+                <p class="text-muted">
+                    Cadastro vinculado ao crachá
+                </p>
+
+            </div>
+
+            <form method="post" autocomplete="off">
+
+                <!-- MATRÍCULA -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Matrícula
+                    </label>
+
+                    <input type="text"
+                           class="form-control form-control-lg"
+                           name="matricula"
+                           autofocus
+                           required
+                           autocomplete="off"
+                           inputmode="none"
+                           placeholder="Passe o crachá no leitor">
+
+                </div>
+
+                <!-- NOME -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nome
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="nome"
+                           required
+                           autocomplete="off"
+                           placeholder="Digite o nome">
+
+                </div>
+
+                <!-- BOTÃO -->
+
+                <div class="d-grid">
+
+                    <button type="submit"
+                            class="btn btn-success btn-lg">
+
+                        <i class="bi bi-person-plus-fill"></i>
+                        Cadastrar Colaborador
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- LISTA -->
+
+    <div class="col-lg-8">
+
+        <div class="card-custom">
+
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+                <div>
+
+                    <h3 class="mb-1">
+                        Colaboradores
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Funcionários cadastrados
+                    </p>
+
+                </div>
+
+                <span class="badge bg-primary fs-6">
+
+                    {{ colaboradores|length }}
+                    cadastrados
+
+                </span>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th width="90">ID</th>
+                            <th>Matrícula</th>
+                            <th>Nome</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for c in colaboradores %}
+
+                        <tr>
+
+                            <td>
+
+                                <span class="badge bg-dark">
+
+                                    #{{ c['id'] }}
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <strong>
+
+                                    {{ c['matricula'] }}
+
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                {{ c['nome'] }}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

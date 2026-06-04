@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card-custom">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Editar Ferramenta
+                </h3>
+
+                <p class="text-muted">
+                    Atualize os dados da retirada
+                </p>
+
+            </div>
+
+            <form method="post" autocomplete="off">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Nome
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="nome"
+                           value="{{ ferramenta['nome'] }}"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Matrícula
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="matricula"
+                           value="{{ ferramenta['matricula'] }}"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Ferramenta
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="ferramenta"
+                           value="{{ ferramenta['ferramenta'] }}"
+                           autocomplete="off"
+                           required>
+
+                </div>
+
+                <div class="d-flex gap-3">
+
+                    <button type="submit"
+                            class="btn btn-primary btn-lg">
+
+                        <i class="bi bi-check-circle-fill"></i>
+                        Salvar Alterações
+
+                    </button>
+
+                    <a href="/"
+                       class="btn btn-secondary btn-lg">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

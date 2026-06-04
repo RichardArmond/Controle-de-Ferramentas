@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row g-4">
+
+    <!-- COLUNA ESQUERDA -->
+
+    <div class="col-lg-4">
+
+        <div class="card-custom h-100">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Identificação
+                </h3>
+
+                <p class="text-muted">
+                    Aproximar crachá do leitor
+                </p>
+
+            </div>
+
+            <form method="post"
+                  id="registroForm"
+                  autocomplete="off">
+
+                <!-- MATRÍCULA -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Matrícula
+                    </label>
+
+                    <input type="text"
+                           class="form-control form-control-lg"
+                           name="matricula"
+                           id="matricula"
+                           autofocus
+                           required
+                           autocomplete="off"
+                           inputmode="none"
+                           placeholder="Aguardando leitura...">
+
+                </div>
+
+                <!-- NOME -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Nome
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           name="nome"
+                           id="nome"
+                           autocomplete="off"
+                           placeholder="Preenchimento automático">
+
+                </div>
+
+        </div>
+
+    </div>
+
+    <!-- COLUNA DIREITA -->
+
+    <div class="col-lg-8">
+
+        <div class="card-custom h-100">
+
+            <div class="mb-4">
+
+                <h3 class="mb-1">
+                    Ferramenta
+                </h3>
+
+                <p class="text-muted">
+                    Registrar retirada de ferramenta
+                </p>
+
+            </div>
+
+            <!-- FERRAMENTA -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Nome da Ferramenta
+                </label>
+
+                <input type="text"
+                       class="form-control form-control-lg"
+                       name="ferramenta"
+                       required
+                       autocomplete="off"
+                       placeholder="Ex: Martelete Bosch">
+
+            </div>
+
+            <!-- BOTÕES -->
+
+            <div class="d-flex gap-3">
+
+                <button type="submit"
+                        class="btn btn-success btn-lg">
+
+                    <i class="bi bi-check-circle-fill"></i>
+                    Registrar Retirada
+
+                </button>
+
+                <a href="/"
+                   class="btn btn-secondary btn-lg">
+
+                    Cancelar
+
+                </a>
+
+            </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const matriculaInput = document.getElementById('matricula');
+const nomeInput = document.getElementById('nome');
+
+matriculaInput.addEventListener('input', async () => {
+
+    const matricula = matriculaInput.value.trim();
+
+    if (!matricula) return;
+
+    try {
+
+        const response = await fetch(`/buscar_colaborador/${matricula}`);
+        const data = await response.json();
+
+        if (data.encontrado) {
+
+            nomeInput.value = data.nome;
+            nomeInput.readOnly = true;
+
+        } else {
+
+            nomeInput.value = '';
+            nomeInput.readOnly = false;
+
+        }
+
+    } catch (erro) {
+
+        console.log('Erro ao buscar colaborador');
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

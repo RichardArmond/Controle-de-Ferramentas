@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-custom">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-1">
+                Histórico de Baixas
+            </h3>
+
+            <p class="text-muted mb-0">
+                Controle completo de devoluções
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Retirado Por</th>
+                    <th>Ferramenta</th>
+                    <th>Devolvido Por</th>
+                    <th>Data</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for b in baixadas %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ b['nome'] }}
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+                            {{ b['matricula'] }}
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+
+                            {{ b['ferramenta'] }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ b['devolvido_por_nome'] }}
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+                            {{ b['devolvido_por_matricula'] }}
+                        </small>
+
+                    </td>
+
+                    <td>
+
+                        {{ b['data_baixa'] }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
