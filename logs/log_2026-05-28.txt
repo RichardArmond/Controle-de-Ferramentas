@@ -1,0 +1,83 @@
+[28/05/2026 07:21:18] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 07:21:21] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 07:21:27] DEVOLUÇÃO: Teste devolveu "aaaaa" | recebido por Richard Armond
+[28/05/2026 07:21:31] BACKUP MANUAL: Richard Armond
+[28/05/2026 07:21:35] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 07:23:04] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 07:23:16] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 07:40:56] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 07:41:35] RETIRADA: RIchard retirou "aaaaaaaaaaa" | registrado por Richard Armond
+[28/05/2026 07:41:50] DEVOLUÇÃO: RIchard devolveu "aaaaaaaaaaa" | recebido por Richard Armond
+[28/05/2026 08:42:30] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 08:42:37] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 08:43:10] RETIRADA: Nicolas Durão retirou "Furadeira" | registrado por Richard Armond
+[28/05/2026 08:43:27] DEVOLUÇÃO: Nicolas Durão devolveu "Furadeira" | recebido por Richard Armond
+[28/05/2026 08:44:00] RETIRADA: Nicolas Durão retirou "mbbjk" | registrado por Richard Armond
+[28/05/2026 08:44:29] USUÁRIO CRIADO: nicolas (nicolas) | tipo: operador | criado por Richard Armond
+[28/05/2026 08:44:31] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 08:44:37] LOGIN: nicolas (nicolas)
+[28/05/2026 08:44:53] RETIRADA: RIchard retirou "scasfsa" | registrado por nicolas
+[28/05/2026 08:45:00] DEVOLUÇÃO: RIchard devolveu "scasfsa" | recebido por nicolas
+[28/05/2026 08:48:33] LOGOUT: nicolas (nicolas)
+[28/05/2026 08:48:35] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 08:48:52] USUÁRIO CRIADO: enx (enxo) | tipo: admin | criado por Richard Armond
+[28/05/2026 08:49:05] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 08:49:19] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 08:49:25] USUÁRIO EXCLUÍDO: enx (enxo) por Richard Armond
+[28/05/2026 08:49:31] USUÁRIO CRIADO: enzo (enzo) | tipo: admin | criado por Richard Armond
+[28/05/2026 08:49:33] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 08:49:44] LOGIN: enzo (enzo)
+[28/05/2026 08:50:12] DEVOLUÇÃO: Nicolas Durão devolveu "mbbjk" | recebido por enzo
+[28/05/2026 08:50:29] LOGOUT: enzo (enzo)
+[28/05/2026 08:50:36] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 09:29:02] LOGIN: Richard Armond (Richard Armond)
+[28/05/2026 09:29:31] RETIRADA: Serginho retirou "Extrator" | registrado por Richard Armond
+[28/05/2026 09:29:39] DEVOLUÇÃO: Serginho devolveu "Extrator" | recebido por Richard Armond
+[28/05/2026 09:31:10] LOGOUT: Richard Armond (Richard Armond)
+[28/05/2026 09:31:14] LOGIN: enzo (enzo)
+[28/05/2026 09:31:22] LOGOUT: enzo (enzo)
+[28/05/2026 09:31:26] LOGIN: Operador (operador)
+[28/05/2026 09:51:47] ADMIN PRINCIPAL CRIADO
+[28/05/2026 09:53:53] TENTATIVA LOGIN INVÁLIDO: Richard Armound
+[28/05/2026 09:53:59] TENTATIVA LOGIN INVÁLIDO: Richard Armond
+[28/05/2026 09:54:07] TENTATIVA LOGIN INVÁLIDO: Richard Armond
+[28/05/2026 10:13:44] LOGIN: Richard Armond (richard)
+[28/05/2026 10:13:57] USUÁRIO CRIADO: Enzo (enzo) | tipo: operador | criado por Richard Armond
+[28/05/2026 10:14:19] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:14:30] LOGIN: Enzo (enzo)
+[28/05/2026 10:14:48] USUÁRIO EXCLUÍDO: Enzo (enzo) por Richard Armond
+[28/05/2026 10:15:05] LOGOUT: Enzo (enzo)
+[28/05/2026 10:15:12] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:15:14] USUÁRIO CRIADO: Enzo (enzo) | tipo: admin | criado por Richard Armond
+[28/05/2026 10:15:22] LOGIN: Enzo (enzo)
+[28/05/2026 10:25:56] TENTATIVA LOGIN INVÁLIDO: richard
+[28/05/2026 10:26:02] LOGIN: Richard Armond (richard)
+[28/05/2026 10:26:32] RETIRADA: Teste retirou "Teste1" | registrado por Richard Armond
+[28/05/2026 10:26:47] LOGOUT: Richard Armond (richard)
+[28/05/2026 10:26:59] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:27:04] LOGIN: Enzo (enzo)
+[28/05/2026 10:27:34] ADMIN PRINCIPAL CRIADO
+[28/05/2026 10:28:18] LOGOUT: Enzo (enzo)
+[28/05/2026 10:28:23] LOGOUT: Richard Armond (richard)
+[28/05/2026 10:28:30] LOGIN: Richard Armond (richard)
+[28/05/2026 10:28:34] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:32:15] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:32:36] USUÁRIO CRIADO: Enzo (enzo) | tipo: admin | criado por Richard Armond
+[28/05/2026 10:32:43] LOGIN: Enzo (enzo)
+[28/05/2026 10:32:47] TENTATIVA DE EXCLUIR ADMIN PRINCIPAL por Enzo
+[28/05/2026 10:54:24] LOGOUT: Richard Armond (richard)
+[28/05/2026 10:54:27] TENTATIVA LOGIN INVÁLIDO: enzo
+[28/05/2026 10:54:57] LOGIN: Enzo (enzo)
+[28/05/2026 10:55:03] TENTATIVA DE EXCLUIR ADMIN PRINCIPAL por Enzo
+[28/05/2026 10:56:12] RETIRADA: Mat retirou "aaa" | registrado por Enzo
+[28/05/2026 11:00:33] LOGOUT: Enzo (enzo)
+[28/05/2026 11:59:05] LOGIN: Richard Armond (richard)
+[28/05/2026 12:16:49] LOGIN: Enzo (enzo)
+[28/05/2026 12:17:00] TENTATIVA DE EXCLUIR ADMIN PRINCIPAL por Enzo
+[28/05/2026 12:17:10] TENTATIVA DE EXCLUIR ADMIN PRINCIPAL por Enzo
+[28/05/2026 12:19:13] LOGOUT: Richard Armond (richard)
+[28/05/2026 12:19:17] LOGIN: Richard Armond (richard)
+[28/05/2026 12:22:02] LOGOUT: Richard Armond (richard)
+[28/05/2026 12:32:11] LOGIN: Richard Armond (richard)
+[28/05/2026 12:32:16] LOGOUT: Richard Armond (richard)
+[28/05/2026 12:33:23] LOGIN: Richard Armond (richard)

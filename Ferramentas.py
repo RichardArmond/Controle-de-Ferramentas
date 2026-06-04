@@ -5,7 +5,8 @@ from flask import (
     redirect,
     url_for,
     jsonify,
-    session
+    session,
+    flash
 )
 
 import sqlite3
@@ -17,10 +18,26 @@ from functools import wraps
 import os
 import shutil
 
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
+)
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+ADMIN_USUARIO = os.getenv('ADMIN_USUARIO')
+ADMIN_SENHA = os.getenv('ADMIN_SENHA')
+ADMIN_NOME = os.getenv('ADMIN_NOME')
+
 
 app = Flask(__name__)
 
-app.secret_key = 'ibar_secret_key'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+app.secret_key = os.getenv('SECRET_KEY')
 
 
 # =========================
@@ -35,6 +52,11 @@ if not os.path.exists(PASTA_BACKUP):
 
     os.makedirs(PASTA_BACKUP)
 
+LOGS = 'logs'
+
+if not os.path.exists(LOGS):
+
+    os.makedirs(LOGS)
 
 # =========================
 # CONEXÃO
@@ -77,13 +99,12 @@ def admin_obrigatorio(f):
 
         if session.get('tipo') != 'admin':
 
-            return '''
-            <h2 style="font-family:Arial;padding:20px;">
-                Acesso permitido apenas para ADMIN.
-            </h2>
+            flash(
+                'Acesso permitido apenas para administradores.',
+                'erro'
+            )
 
-            <a href="/">Voltar</a>
-            '''
+            return redirect(url_for('index'))
 
         return f(*args, **kwargs)
 
@@ -113,6 +134,54 @@ def gerar_backup():
     shutil.copy2(BANCO, destino)
 
     print(f'Backup criado: {destino}')
+
+# =========================
+# LOGS DO SISTEMA
+# =========================
+
+def registrar_log(mensagem):
+
+    data_log = datetime.now().strftime(
+        '%Y-%m-%d'
+    )
+
+    arquivo_log = os.path.join(
+        LOGS,
+        f'log_{data_log}.txt'
+    )
+
+    horario = datetime.now().strftime(
+        '%d/%m/%Y %H:%M:%S'
+    )
+
+    with open(
+        arquivo_log,
+        'a',
+        encoding='utf-8'
+    ) as log:
+
+        log.write(
+            f'[{horario}] {mensagem}\n'
+        )
+
+# =========================
+# MENSAGEM PADRÃO
+# =========================
+
+def mensagem(
+    titulo,
+    texto,
+    tipo='alerta',
+    voltar='/'
+):
+
+    return render_template(
+        'mensagem.html',
+        titulo=titulo,
+        mensagem=texto,
+        tipo=tipo,
+        voltar=voltar
+    )
 
 # =========================
 # CRIAR TABELAS
@@ -195,17 +264,17 @@ def criar_tabelas():
         )
         ''')
 
-        # =========================
-        # ADMIN PADRÃO
-        # =========================
-
-        admin = con.execute('''
+        admin_existe = con.execute('''
         SELECT *
         FROM sistema_usuarios
-        WHERE usuario=?
-        ''', ('Richard Armond',)).fetchone()
+        WHERE tipo='admin'
+        ''').fetchone()
 
-        if not admin:
+        if not admin_existe:
+
+            senha_hash = generate_password_hash(
+                ADMIN_SENHA
+            )
 
             con.execute('''
             INSERT INTO sistema_usuarios
@@ -217,11 +286,15 @@ def criar_tabelas():
             )
             VALUES (?, ?, ?, ?)
             ''', (
-                'Richard Armond',
-                'solda',
-                'Richard Armond',
+                ADMIN_USUARIO,
+                senha_hash,
+                ADMIN_NOME,
                 'admin'
             ))
+
+            registrar_log(
+                'ADMIN PRINCIPAL CRIADO'
+            )
 
         # =========================
         # OPERADOR PADRÃO
@@ -235,6 +308,8 @@ def criar_tabelas():
 
         if not operador:
 
+            senha_operador = generate_password_hash('123')
+
             con.execute('''
             INSERT INTO sistema_usuarios
             (
@@ -246,7 +321,7 @@ def criar_tabelas():
             VALUES (?, ?, ?, ?)
             ''', (
                 'operador',
-                '123',
+                senha_operador,
                 'Operador',
                 'operador'
             ))
@@ -265,13 +340,93 @@ def gerar_backup_manual():
 
     gerar_backup()
 
-    return '''
-    <h2 style="font-family:Arial;padding:20px;">
-        Backup gerado com sucesso.
-    </h2>
+    registrar_log(
+        f'BACKUP MANUAL: {session["usuario_nome"]}'
+    )
 
-    <a href="/">Voltar</a>
-    '''
+    flash(
+        'Backup gerado com sucesso.',
+        'sucesso'
+    )
+
+    return redirect(url_for('backups'))
+
+# =========================
+# RESTAURAR BACKUP
+# =========================
+
+@app.route('/restaurar_backup/<nome_arquivo>')
+@login_obrigatorio
+@admin_obrigatorio
+def restaurar_backup(nome_arquivo):
+
+    caminho_backup = os.path.join(
+        PASTA_BACKUP,
+        nome_arquivo
+    )
+
+    if not os.path.exists(caminho_backup):
+
+        flash(
+            'Backup não encontrado.',
+            'erro'
+        )
+
+        return redirect(url_for('backups'))
+
+    shutil.copy2(caminho_backup, BANCO)
+
+    registrar_log(
+        f'BACKUP RESTAURADO: {nome_arquivo} por {session["usuario_nome"]}'
+    )
+
+    flash(
+        'Backup restaurado com sucesso. Reinicie o sistema.',
+        'sucesso'
+    )
+
+    return redirect(url_for('backups'))
+
+# =========================
+# LISTA BACKUPS
+# =========================
+
+@app.route('/backups')
+@login_obrigatorio
+@admin_obrigatorio
+def backups():
+
+    arquivos = []
+
+    for arquivo in os.listdir(PASTA_BACKUP):
+
+        if arquivo.endswith('.db'):
+
+            caminho = os.path.join(
+                PASTA_BACKUP,
+                arquivo
+            )
+
+            data_modificacao = datetime.fromtimestamp(
+                os.path.getmtime(caminho)
+            )
+
+            arquivos.append({
+                'nome': arquivo,
+                'data': data_modificacao.strftime(
+                    '%d/%m/%Y %H:%M:%S'
+                )
+            })
+
+    arquivos.sort(
+        key=lambda x: x['data'],
+        reverse=True
+    )
+
+    return render_template(
+        'backups.html',
+        backups=arquivos
+    )
 
 # =========================
 # LOGIN
@@ -291,31 +446,32 @@ def login():
             SELECT *
             FROM sistema_usuarios
             WHERE usuario=?
-            AND senha=?
-            ''', (
-                usuario,
-                senha
-            )).fetchone()
+            ''', (usuario,)).fetchone()
 
-        if user:
+        if user and check_password_hash(
+            user['senha'],
+            senha
+        ):
 
             session['usuario_id'] = user['id']
             session['usuario_nome'] = user['nome']
             session['usuario'] = user['usuario']
             session['tipo'] = user['tipo']
 
+            registrar_log(
+                f'LOGIN: {user["nome"]} ({user["usuario"]})'
+            )
+
             return redirect(url_for('index'))
 
-        return '''
-        <h2 style="font-family:Arial;padding:20px;">
-            Usuário ou senha inválidos.
-        </h2>
+        flash(
+            'Usuário ou senha incorretos.',
+            'erro'
+        )
 
-        <a href="/login">Voltar</a>
-        '''
+        return redirect(url_for('login'))
 
     return render_template('login.html')
-
 
 # =========================
 # LOGOUT
@@ -324,10 +480,15 @@ def login():
 @app.route('/logout')
 def logout():
 
+    if 'usuario_nome' in session:
+
+        registrar_log(
+            f'LOGOUT: {session["usuario_nome"]} ({session["usuario"]})'
+        )
+
     session.clear()
 
     return redirect(url_for('login'))
-
 
 # =========================
 # HOME
@@ -493,6 +654,11 @@ def registrar():
 
         if not matricula or not ferramenta:
 
+            flash(
+                'Preencha todos os campos.',
+                'alerta'
+            )
+
             return redirect(url_for('registrar'))
 
         with conectar() as con:
@@ -507,13 +673,12 @@ def registrar():
 
                 if not nome:
 
-                    return '''
-                    <h2 style="font-family:Arial;padding:20px;">
-                        Colaborador não encontrado.
-                    </h2>
+                    flash(
+                        'Colaborador não encontrado.',
+                        'erro'
+                    )
 
-                    <a href="/registrar">Voltar</a>
-                    '''
+                    return redirect(url_for('registrar'))
 
                 con.execute('''
                 INSERT INTO usuarios
@@ -536,15 +701,16 @@ def registrar():
 
             if ferramenta_existente:
 
-                return '''
-                <h2 style="font-family:Arial;padding:20px;">
-                    Ferramenta já retirada.
-                </h2>
+                flash(
+                    'Ferramenta já emprestada.',
+                    'erro'
+                )
 
-                <a href="/">Voltar</a>
-                '''
+                return redirect(url_for('registrar'))
 
-            data_registro = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            data_registro = datetime.now().strftime(
+                '%Y-%m-%d %H:%M:%S'
+            )
 
             con.execute('''
             INSERT INTO ferramentas
@@ -565,6 +731,16 @@ def registrar():
                 session['usuario'],
                 session['usuario_nome']
             ))
+
+            registrar_log(
+                f'RETIRADA: {nome} retirou "{ferramenta}" '
+                f'| registrado por {session["usuario_nome"]}'
+            )
+
+        flash(
+            'Ferramenta registrada com sucesso.',
+            'sucesso'
+        )
 
         return redirect(url_for('index'))
 
@@ -611,6 +787,11 @@ def editar(id):
                 id
             ))
 
+            registrar_log(
+                f'EDIÇÃO: ferramenta ID {id} alterada por '
+                f'{session["usuario_nome"]}'
+            )
+
             return redirect(url_for('index'))
 
     return render_template(
@@ -651,13 +832,14 @@ def baixar(id):
 
             if not usuario_devolucao:
 
-                return '''
-                <h2 style="font-family:Arial;padding:20px;">
-                    Colaborador não encontrado.
-                </h2>
+                flash(
+                    'Colaborador não encontrado.',
+                    'erro'
+                )
 
-                <a href="/">Voltar</a>
-                '''
+                return redirect(
+                    url_for('baixar', id=id)
+                )
 
             data_baixa = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -703,6 +885,12 @@ def baixar(id):
             DELETE FROM ferramentas
             WHERE id=?
             ''', (id,))
+
+            registrar_log(
+                f'DEVOLUÇÃO: {ferramenta["nome"]} devolveu '
+                f'"{ferramenta["ferramenta"]}" '
+                f'| recebido por {session["usuario_nome"]}'
+            )
 
             return redirect(url_for('index'))
 
@@ -788,14 +976,19 @@ def excluir_colaborador(id):
 
         if ferramenta_pendente:
 
-            return '''
-            <h2 style="font-family:Arial;padding:20px;">
-                Não é possível excluir.
-                Colaborador possui ferramenta pendente.
-            </h2>
+            return mensagem(
+                'Exclusão não permitida',
+                'O colaborador possui ferramenta pendente.',
+                'alerta',
+                '/colaboradores'
+            )
 
-            <a href="/colaboradores">Voltar</a>
-            '''
+        registrar_log(
+            f'COLABORADOR EXCLUÍDO: '
+            f'{colaborador["nome"]} '
+            f'({colaborador["matricula"]}) '
+            f'por {session["usuario_nome"]}'
+        )
 
         con.execute('''
         DELETE FROM usuarios
@@ -830,13 +1023,18 @@ def usuarios_sistema():
 
             if existente:
 
-                return '''
-                <h2 style="font-family:Arial;padding:20px;">
-                    Usuário já existe.
-                </h2>
+                if existente:
 
-                <a href="/usuarios_sistema">Voltar</a>
-                '''
+                    flash(
+                        'Usuário já existe.',
+                        'erro'
+                    )
+
+                    return redirect(
+                        url_for('usuarios_sistema')
+                    )
+
+            senha_hash = generate_password_hash(senha)
 
             con.execute('''
             INSERT INTO sistema_usuarios
@@ -849,10 +1047,17 @@ def usuarios_sistema():
             VALUES (?, ?, ?, ?)
             ''', (
                 usuario,
-                senha,
+                senha_hash,
                 nome,
                 tipo
             ))
+
+            registrar_log(
+                f'USUÁRIO CRIADO: '
+                f'{nome} ({usuario}) '
+                f'| tipo: {tipo} '
+                f'| criado por {session["usuario_nome"]}'
+            )
 
         usuarios = con.execute('''
         SELECT *
@@ -864,7 +1069,6 @@ def usuarios_sistema():
         'usuarios_sistema.html',
         usuarios=usuarios
     )
-
 
 # =========================
 # EXCLUIR USUÁRIO SISTEMA
@@ -887,29 +1091,46 @@ def excluir_usuario_sistema(id):
 
             return redirect(url_for('usuarios_sistema'))
 
-        # NÃO PERMITE EXCLUIR O ADMIN PRINCIPAL
+        # =========================
+        # NÃO PERMITE EXCLUIR
+        # O ADMIN PRINCIPAL
+        # =========================
 
-        if usuario['usuario'] == 'Richard Armond':
+        if usuario['usuario'] == ADMIN_USUARIO:
 
-            return '''
-            <h2 style="font-family:Arial;padding:20px;">
-                Não é permitido excluir o administrador principal.
-            </h2>
+            registrar_log(
+                f'TENTATIVA DE EXCLUIR ADMIN PRINCIPAL '
+                f'por {session["usuario_nome"]}'
+            )
 
-            <a href="/usuarios_sistema">Voltar</a>
-            '''
+            return mensagem(
+                'Ação não permitida',
+                'Não é permitido excluir o administrador principal.',
+                'erro',
+                '/usuarios_sistema'
+            )
 
-        # NÃO PERMITE EXCLUIR A SI MESMO
+        # =========================
+        # NÃO PERMITE EXCLUIR
+        # O PRÓPRIO USUÁRIO
+        # =========================
 
         if usuario['id'] == session['usuario_id']:
 
-            return '''
-            <h2 style="font-family:Arial;padding:20px;">
-                Você não pode excluir seu próprio usuário.
-            </h2>
+            flash(
+                'Você não pode excluir seu próprio usuário.',
+                'alerta'
+            )
 
-            <a href="/usuarios_sistema">Voltar</a>
-            '''
+            return redirect(
+                url_for('usuarios_sistema')
+            )
+
+        registrar_log(
+            f'USUÁRIO EXCLUÍDO: '
+            f'{usuario["nome"]} ({usuario["usuario"]}) '
+            f'por {session["usuario_nome"]}'
+        )
 
         con.execute('''
         DELETE FROM sistema_usuarios
@@ -917,6 +1138,7 @@ def excluir_usuario_sistema(id):
         ''', (id,))
 
     return redirect(url_for('usuarios_sistema'))
+
 # =========================
 # HISTÓRICO
 # =========================
@@ -985,6 +1207,8 @@ def baixadas():
 if __name__ == '__main__':
 
     app.run(
-        debug=True,
+        debug=False,
+        use_reloader=False,
+        host='0.0.0.0',
         port=5001
     )

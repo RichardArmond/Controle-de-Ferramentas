@@ -5,12 +5,24 @@
 
     <meta charset="UTF-8">
 
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>
         Login - Controle de Ferramentas
     </title>
 
+    <!-- Bootstrap -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -23,8 +35,12 @@
 
         <div class="login-card">
 
+            <!-- LOGO -->
+
             <img src="{{ url_for('static', filename='img/IBAR.png') }}"
                  class="login-logo">
+
+            <!-- TÍTULO -->
 
             <h2>
                 Controle de Ferramentas
@@ -33,6 +49,74 @@
             <p>
                 Faça login para continuar
             </p>
+
+            <!-- ALERTAS -->
+
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+                {% if mensagens %}
+
+                    {% for categoria, mensagem in mensagens %}
+
+                        <div class="
+                            flash
+                            alert
+                            alert-dismissible
+                            fade
+                            show
+
+                            {% if categoria == 'erro' %}
+                                alert-danger
+                            {% elif categoria == 'sucesso' %}
+                                alert-success
+                            {% elif categoria == 'alerta' %}
+                                alert-warning
+                            {% else %}
+                                alert-primary
+                            {% endif %}
+                        "
+                        role="alert">
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                {% if categoria == 'erro' %}
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                {% elif categoria == 'sucesso' %}
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                {% elif categoria == 'alerta' %}
+
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                                {% else %}
+
+                                    <i class="bi bi-info-circle-fill"></i>
+
+                                {% endif %}
+
+                                <span>
+                                    {{ mensagem }}
+                                </span>
+
+                            </div>
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+            <!-- FORM -->
 
             <form method="post">
 
@@ -71,6 +155,14 @@
         </div>
 
     </div>
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ALERTAS -->
+
+    <script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
 
 </body>
 

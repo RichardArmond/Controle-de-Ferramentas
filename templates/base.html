@@ -5,6 +5,9 @@
 
     <meta charset="UTF-8">
 
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>
         Controle de Ferramentas
     </title>
@@ -76,6 +79,13 @@
 
             </a>
 
+            <a href="/backups">
+
+                <i class="bi bi-database-fill"></i>
+                Backups
+
+            </a>
+
             {% endif %}
 
             <a href="/baixadas">
@@ -87,7 +97,7 @@
 
         </div>
 
-        <!-- USUÁRIO LOGADO -->
+        <!-- USUÁRIO -->
 
         <div class="sidebar-user">
 
@@ -96,25 +106,19 @@
             </small>
 
             <strong>
-
                 {{ session['usuario_nome'] }}
-
             </strong>
 
             {% if session['tipo'] == 'admin' %}
 
                 <span class="badge bg-danger mt-2">
-
                     ADMIN
-
                 </span>
 
             {% else %}
 
                 <span class="badge bg-primary mt-2">
-
                     OPERADOR
-
                 </span>
 
             {% endif %}
@@ -147,6 +151,8 @@
 
     <div class="main-content">
 
+        <!-- TOPO -->
+
         <div class="topbar">
 
             <div>
@@ -163,21 +169,106 @@
 
         </div>
 
+        <!-- ALERTAS FLASH -->
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+            {% if mensagens %}
+
+                <div class="flash-container">
+
+                    {% for categoria, mensagem in mensagens %}
+
+                        <div class="
+                            flash
+                            alert
+                            alert-dismissible
+                            fade
+                            show
+                            shadow-sm
+
+                            {% if categoria == 'erro' %}
+                                alert-danger
+                            {% elif categoria == 'sucesso' %}
+                                alert-success
+                            {% elif categoria == 'alerta' %}
+                                alert-warning
+                            {% else %}
+                                alert-primary
+                            {% endif %}
+                        "
+                        role="alert">
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                {% if categoria == 'erro' %}
+
+                                    <i class="bi bi-x-circle-fill"></i>
+
+                                {% elif categoria == 'sucesso' %}
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                {% elif categoria == 'alerta' %}
+
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                                {% else %}
+
+                                    <i class="bi bi-info-circle-fill"></i>
+
+                                {% endif %}
+
+                                <span>
+                                    {{ mensagem }}
+                                </span>
+
+                            </div>
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert">
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+        <!-- CONTEÚDO -->
+
         {% block content %}
         {% endblock %}
 
     </div>
 
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS ALERTAS -->
+
+    <script src="{{ url_for('static', filename='js/alerts.js') }}"></script>
+
     <!-- DESATIVAR AUTOCOMPLETE -->
 
     <script>
 
-        document.querySelectorAll('input').forEach(input => {
+        document.addEventListener('DOMContentLoaded', () => {
 
-            input.setAttribute('autocomplete', 'off')
-            input.setAttribute('autocorrect', 'off')
-            input.setAttribute('autocapitalize', 'off')
-            input.setAttribute('spellcheck', 'false')
+            document.querySelectorAll('input').forEach(input => {
+
+                input.setAttribute('autocomplete', 'off')
+                input.setAttribute('autocorrect', 'off')
+                input.setAttribute('autocapitalize', 'off')
+                input.setAttribute('spellcheck', 'false')
+
+            })
 
         })
 

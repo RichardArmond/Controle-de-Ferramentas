@@ -441,38 +441,206 @@ input[name="uid"]{
 ========================= */
 
 .login-page{
-    background:#111827;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
 
-.login-container{
-    width:100%;
-    max-width:420px;
+    margin:0;
+
+    min-height:100vh;
+
+    background:#111827;
+
+    margin-left:260px;
+
+    justify-content:center;
+
+    align-items:center;
+
     padding:20px;
 }
 
+.login-container{
+
+    width:100%;
+
+    max-width:420px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
 .login-card{
+
+    width:100%;
+
     background:#1f2937;
+
     padding:40px;
+
     border-radius:20px;
+
     box-shadow:0 4px 20px rgba(0,0,0,0.4);
+
     text-align:center;
 }
 
 .login-logo{
+
     width:180px;
+
     margin-bottom:25px;
 }
 
 .login-card h2{
+
+    color:white;
+
     font-weight:700;
+
     margin-bottom:10px;
 }
 
 .login-card p{
+
     color:#9ca3af;
+
     margin-bottom:30px;
 }
+
+/* INPUTS */
+
+.login-card .form-control{
+
+    background:#0f172a;
+
+    border:1px solid #374151;
+
+    color:white;
+
+    border-radius:12px;
+
+    height:50px;
+}
+
+.login-card .form-control:focus{
+
+    background:#0f172a;
+
+    color:white;
+
+    border-color:#2563eb;
+
+    box-shadow:none;
+}
+
+/* BOTÃO */
+
+.login-card .btn{
+
+    height:50px;
+
+    border-radius:12px;
+
+    font-weight:600;
+}
+
+/* ALERTAS */
+
+.login-card .alert{
+
+    text-align:left;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+}
+
+/* =========================
+   CORREÇÃO LOGIN
+========================= */
+
+body.login-page{
+
+    margin:0 !important;
+
+    min-height:100vh !important;
+
+    display:flex !important;
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    background:#111827 !important;
+
+    padding:20px !important;
+}
+
+body.login-page .login-container{
+
+    width:100%;
+
+    max-width:420px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+/* =========================
+   MENSAGENS
+========================= */
+.flash-container{
+
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.flash{
+
+    padding:14px;
+
+    border-radius:8px;
+
+    color:rgb(0, 0, 0);
+
+    font-weight:bold;
+
+    animation:fadeIn 0.3s ease;
+}
+
+.flash.erro{
+    background:#ff021b;
+}
+
+.flash.sucesso{
+    background:#28a745;
+}
+
+.flash.alerta{
+    background:#ffbf00;
+    color:#222;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+

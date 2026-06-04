@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card-custom">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3>
+                Backups do Sistema
+            </h3>
+
+            <p class="text-muted mb-0">
+                Restaurar backups disponíveis
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('gerar_backup_manual') }}"
+           class="btn btn-primary">
+
+            <i class="bi bi-database-fill-down"></i>
+            Gerar Backup
+
+        </a>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Arquivo</th>
+                    <th>Data</th>
+                    <th width="180">Ações</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for b in backups %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ b.nome }}
+                        </strong>
+
+                    </td>
+
+                    <td>
+                        {{ b.data }}
+                    </td>
+
+                    <td>
+
+                        <a href="{{ url_for('restaurar_backup', nome_arquivo=b.nome) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Deseja realmente restaurar este backup?')">
+
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                            Restaurar
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="3" class="text-center text-muted py-4">
+
+                        Nenhum backup encontrado.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
