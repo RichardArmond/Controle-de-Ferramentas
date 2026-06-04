@@ -4,16 +4,16 @@
 
 <div class="card-custom">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
         <div>
 
             <h3 class="mb-1">
-                Histórico de Baixas
+                Histórico Avançado
             </h3>
 
             <p class="text-muted mb-0">
-                Controle completo de devoluções
+                Controle completo das movimentações
             </p>
 
         </div>
@@ -30,8 +30,11 @@
 
                     <th>Retirado Por</th>
                     <th>Ferramenta</th>
+                    <th>Data Retirada</th>
+                    <th>Data Devolução</th>
+                    <th>Tempo Fora</th>
                     <th>Devolvido Por</th>
-                    <th>Data</th>
+                    <th>Registrado</th>
 
                 </tr>
 
@@ -42,6 +45,8 @@
                 {% for b in baixadas %}
 
                 <tr>
+
+                    <!-- RETIRADO -->
 
                     <td>
 
@@ -57,6 +62,8 @@
 
                     </td>
 
+                    <!-- FERRAMENTA -->
+
                     <td>
 
                         <span class="badge bg-primary">
@@ -66,6 +73,44 @@
                         </span>
 
                     </td>
+
+                    <!-- DATA RETIRADA -->
+
+                    <td>
+
+                        {{ b['data_retirada'] }}
+
+                    </td>
+
+                    <!-- DATA DEVOLUÇÃO -->
+
+                    <td>
+
+                        {{ b['data_baixa'] }}
+
+                    </td>
+
+                    <!-- TEMPO FORA -->
+
+                    <td>
+
+                        {% if b['tempo_total'] %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                {{ b['tempo_total'] }}
+
+                            </span>
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                    <!-- DEVOLVIDO POR -->
 
                     <td>
 
@@ -81,9 +126,23 @@
 
                     </td>
 
+                    <!-- REGISTRADO -->
+
                     <td>
 
-                        {{ b['data_baixa'] }}
+                        <small>
+
+                            <strong>Retirada:</strong><br>
+
+                            {{ b['registrado_por_nome'] }}
+
+                            <hr>
+
+                            <strong>Devolução:</strong><br>
+
+                            {{ b['devolucao_registrada_por_nome'] }}
+
+                        </small>
 
                     </td>
 

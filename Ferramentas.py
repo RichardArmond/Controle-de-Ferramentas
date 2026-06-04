@@ -14,6 +14,9 @@ from datetime import datetime
 
 from functools import wraps
 
+import os
+import shutil
+
 
 app = Flask(__name__)
 
@@ -25,6 +28,12 @@ app.secret_key = 'ibar_secret_key'
 # =========================
 
 BANCO = 'ferramentas_novo.db'
+
+PASTA_BACKUP = 'backup'
+
+if not os.path.exists(PASTA_BACKUP):
+
+    os.makedirs(PASTA_BACKUP)
 
 
 # =========================
@@ -80,6 +89,30 @@ def admin_obrigatorio(f):
 
     return decorated_function
 
+# =========================
+# BACKUP AUTOMÁTICO
+# =========================
+
+def gerar_backup():
+
+    if not os.path.exists(BANCO):
+
+        return
+
+    data_backup = datetime.now().strftime(
+        '%Y-%m-%d_%H-%M-%S'
+    )
+
+    nome_backup = f'backup_{data_backup}.db'
+
+    destino = os.path.join(
+        PASTA_BACKUP,
+        nome_backup
+    )
+
+    shutil.copy2(BANCO, destino)
+
+    print(f'Backup criado: {destino}')
 
 # =========================
 # CRIAR TABELAS
@@ -218,9 +251,27 @@ def criar_tabelas():
                 'operador'
             ))
 
-
 criar_tabelas()
+gerar_backup()
 
+# =========================
+# GERAR BACKUP MANUAL
+# =========================
+
+@app.route('/gerar_backup')
+@login_obrigatorio
+@admin_obrigatorio
+def gerar_backup_manual():
+
+    gerar_backup()
+
+    return '''
+    <h2 style="font-family:Arial;padding:20px;">
+        Backup gerado com sucesso.
+    </h2>
+
+    <a href="/">Voltar</a>
+    '''
 
 # =========================
 # LOGIN
@@ -315,6 +366,56 @@ def index():
             ORDER BY data_registro DESC
             ''').fetchall()
 
+        # =========================
+        # ALERTAS DE ATRASO
+        # =========================
+
+        lista_ferramentas = []
+
+        atrasadas = []
+
+        for f in ferramentas:
+
+            item = dict(f)
+
+            try:
+
+                retirada = datetime.strptime(
+                    f['data_registro'],
+                    '%Y-%m-%d %H:%M:%S'
+                )
+
+                agora = datetime.now()
+
+                diferenca = agora - retirada
+
+                horas = int(diferenca.total_seconds() / 3600)
+
+                item['horas_fora'] = horas
+
+                # STATUS VISUAL
+
+                if horas >= 24:
+
+                    item['status'] = 'danger'
+
+                    atrasadas.append(item)
+
+                elif horas >= 12:
+
+                    item['status'] = 'warning'
+
+                else:
+
+                    item['status'] = 'success'
+
+            except:
+
+                item['horas_fora'] = 0
+                item['status'] = 'success'
+
+            lista_ferramentas.append(item)
+
         total_ferramentas = con.execute('''
         SELECT COUNT(*)
         FROM ferramentas
@@ -340,15 +441,14 @@ def index():
 
     return render_template(
         'index.html',
-        ferramentas=ferramentas,
+        ferramentas=lista_ferramentas,
+        atrasadas=atrasadas,
         busca=busca,
         total_ferramentas=total_ferramentas,
         total_colaboradores=total_colaboradores,
         baixadas_hoje=baixadas_hoje,
         ultima_retirada=ultima_retirada
     )
-
-
 # =========================
 # BUSCAR COLABORADOR
 # =========================
@@ -833,9 +933,48 @@ def baixadas():
         ORDER BY data_baixa DESC
         ''').fetchall()
 
+        lista = []
+
+        for b in baixadas:
+
+            item = dict(b)
+
+            try:
+
+                retirada = datetime.strptime(
+                    b['data_retirada'],
+                    '%Y-%m-%d %H:%M:%S'
+                )
+
+                devolucao = datetime.strptime(
+                    b['data_baixa'],
+                    '%Y-%m-%d %H:%M:%S'
+                )
+
+                diferenca = devolucao - retirada
+
+                dias = diferenca.days
+                horas = diferenca.seconds // 3600
+
+                if dias > 0:
+
+                    tempo = f'{dias}d {horas}h'
+
+                else:
+
+                    tempo = f'{horas}h'
+
+                item['tempo_total'] = tempo
+
+            except:
+
+                item['tempo_total'] = '-'
+
+            lista.append(item)
+
     return render_template(
         'baixadas.html',
-        baixadas=baixadas
+        baixadas=lista
     )
 
 

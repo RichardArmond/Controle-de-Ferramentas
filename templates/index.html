@@ -91,34 +91,18 @@
             <div>
 
                 <p class="dashboard-title">
-                    Última Retirada
+                    Ferramentas Atrasadas
                 </p>
 
-                {% if ultima_retirada %}
-
-                    <strong>
-
-                        {{ ultima_retirada['nome'] }}
-
-                    </strong>
-
-                    <p class="mb-0 text-muted">
-
-                        {{ ultima_retirada['ferramenta'] }}
-
-                    </p>
-
-                {% else %}
-
-                    <p>Nenhuma</p>
-
-                {% endif %}
+                <h2 class="text-danger">
+                    {{ atrasadas|length }}
+                </h2>
 
             </div>
 
             <div class="dashboard-icon bg-warning">
 
-                <i class="bi bi-clock-history"></i>
+                <i class="bi bi-exclamation-triangle-fill"></i>
 
             </div>
 
@@ -127,6 +111,97 @@
     </div>
 
 </div>
+
+<!-- ALERTAS -->
+
+{% if atrasadas %}
+
+<div class="card-custom border border-danger mb-4">
+
+    <div class="d-flex align-items-center mb-4">
+
+        <i class="bi bi-exclamation-octagon-fill text-danger me-3"
+           style="font-size:35px;"></i>
+
+        <div>
+
+            <h3 class="mb-1 text-danger">
+                Ferramentas Atrasadas
+            </h3>
+
+            <p class="text-muted mb-0">
+                Ferramentas fora há mais de 24 horas
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Colaborador</th>
+                    <th>Ferramenta</th>
+                    <th>Tempo Fora</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for a in atrasadas %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ a['nome'] }}
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-danger">
+
+                            {{ a['ferramenta'] }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-danger">
+
+                            {{ a['horas_fora'] }}h fora
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<!-- CABEÇALHO -->
 
 <div class="card-custom">
 
@@ -144,7 +219,7 @@
 
         </div>
 
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 flex-wrap">
 
             <a href="{{ url_for('registrar') }}"
                class="btn btn-success">
@@ -162,11 +237,25 @@
 
             </a>
 
+                {% if session['tipo'] == 'admin' %}
+
+                <a href="{{ url_for('gerar_backup_manual') }}"
+                class="btn btn-primary">
+
+                    <i class="bi bi-database-fill"></i>
+                    Gerar Backup
+
+                </a>
+
+                {% endif %}
+
         </div>
 
     </div>
 
 </div>
+
+<!-- BUSCA -->
 
 <div class="card-custom">
 
@@ -203,6 +292,8 @@
 
 </div>
 
+<!-- TABELA -->
+
 <div class="card-custom">
 
     <div class="table-responsive">
@@ -217,6 +308,8 @@
                     <th>Matrícula</th>
                     <th>Ferramenta</th>
                     <th>Data Retirada</th>
+                    <th>Retirado Por</th>
+                    <th width="130">Status</th>
                     <th width="180">Ações</th>
 
                 </tr>
@@ -252,12 +345,49 @@
                     </td>
 
                     <td>
-                        {{ f['data_registro'] }}
+                        {{ f['data_registro'].replace('-', '/')
+                     .replace('T', ' ') }}
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            {{ f['retirado_por_nome'] }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {% if f['status'] == 'danger' %}
+
+                            <span class="badge bg-danger">
+                                🔴 {{ f['horas_fora'] }}h
+                            </span>
+
+                        {% elif f['status'] == 'warning' %}
+
+                            <span class="badge bg-warning text-dark">
+                                🟡 {{ f['horas_fora'] }}h
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+                                🟢 OK
+                            </span>
+
+                        {% endif %}
+
                     </td>
 
                     <td>
 
                         <div class="d-flex gap-2">
+
+                            {% if session['tipo'] == 'admin' %}
 
                             <a href="{{ url_for('editar', id=f['id']) }}"
                                class="btn btn-warning btn-sm">
@@ -265,6 +395,8 @@
                                 <i class="bi bi-pencil-fill"></i>
 
                             </a>
+
+                            {% endif %}
 
                             <a href="{{ url_for('baixar', id=f['id']) }}"
                                class="btn btn-danger btn-sm">
@@ -274,6 +406,18 @@
                             </a>
 
                         </div>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="7" class="text-center text-muted py-4">
+
+                        Nenhuma ferramenta encontrada.
 
                     </td>
 
