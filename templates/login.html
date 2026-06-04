@@ -118,7 +118,8 @@
 
             <!-- FORM -->
 
-            <form method="post">
+            <form method="post"
+                  autocomplete="off">
 
                 <div class="mb-3">
 
@@ -126,6 +127,10 @@
                            name="usuario"
                            class="form-control form-control-lg"
                            placeholder="Usuário"
+                           autocomplete="off"
+                           autocorrect="off"
+                           autocapitalize="off"
+                           spellcheck="false"
                            required>
 
                 </div>
@@ -136,6 +141,10 @@
                            name="senha"
                            class="form-control form-control-lg"
                            placeholder="Senha"
+                           autocomplete="new-password"
+                           autocorrect="off"
+                           autocapitalize="off"
+                           spellcheck="false"
                            required>
 
                 </div>
